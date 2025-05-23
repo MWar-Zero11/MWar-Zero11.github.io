@@ -9,6 +9,39 @@ document.addEventListener('DOMContentLoaded', function() {
             nav.classList.toggle('active');
         });
     }
+      // Load Vimeo thumbnails for portfolio items
+    function loadVimeoThumbnails() {
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
+        portfolioItems.forEach(item => {
+            const vimeoId = item.getAttribute('data-vimeo-id');
+            const thumbnailImg = item.querySelector('.portfolio-thumbnail');
+            
+            // Make sure there are no iframes in the portfolio item that might have been added accidentally
+            const existingIframes = item.querySelectorAll('iframe');
+            if (existingIframes.length > 0) {
+                existingIframes.forEach(iframe => iframe.remove());
+            }
+            
+            if (vimeoId && thumbnailImg) {
+                // Try to use the Vimeo API to get thumbnail
+                fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${vimeoId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.thumbnail_url) {
+                            thumbnailImg.src = data.thumbnail_url;
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Error loading Vimeo thumbnail:', error);
+                        // Try direct approach as fallback
+                        thumbnailImg.src = `https://i.vimeocdn.com/video/${vimeoId}_640.jpg`;
+                    });
+            }
+        });
+    }
+    
+    // Load thumbnails
+    loadVimeoThumbnails();
     
     // Navigation Highlight on Scroll
     const sections = document.querySelectorAll('section[id]');
@@ -58,6 +91,120 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Project Modal Functionality
+    const modal = document.getElementById('project-modal');
+    const modalClose = document.querySelector('.modal-close');
+    const modalVideoContainer = document.querySelector('.modal-video-container');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDescription = document.getElementById('modal-description');
+    const modalCategory = document.getElementById('modal-category');
+    
+    // Open modal when clicking on portfolio item
+    portfolioItems.forEach(item => {        // Add click event specifically to the view project overlay
+        const viewProjectOverlay = item.querySelector('.view-project-overlay');
+        if (viewProjectOverlay) {
+            viewProjectOverlay.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation(); // Prevent double triggering
+                openProjectModal(item);
+            });
+            
+            // Also add click event to the span inside view project overlay
+            const viewProjectSpan = viewProjectOverlay.querySelector('span');
+            if (viewProjectSpan) {
+                viewProjectSpan.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation(); // Prevent event from bubbling up
+                    openProjectModal(item);
+                });
+            }
+        }
+        
+        // Add click event to the play indicator button
+        const playIndicator = item.querySelector('.play-indicator');
+        if (playIndicator) {
+            playIndicator.addEventListener('click', function(e) {
+                e.stopPropagation();
+                openProjectModal(item);
+            });
+        }
+          // Also add click to the item itself as a fallback, but be more selective
+        item.addEventListener('click', function(e) {
+            // Only open modal if not clicking on another interactive element
+            // and not clicking on the thumbnail or play indicator (those have their own handlers)
+            if (!e.target.closest('iframe') && 
+                !e.target.closest('.play-indicator') && 
+                !e.target.closest('.view-project-overlay') &&
+                !e.target.classList.contains('portfolio-thumbnail')) {
+                openProjectModal(this);
+            }
+        });
+    });    function openProjectModal(item) {
+        // Get project data from data attributes
+        const vimeoId = item.getAttribute('data-vimeo-id');
+        const title = item.getAttribute('data-title');
+        const description = item.getAttribute('data-description');
+        const category = item.getAttribute('data-category');
+        
+        // First show the modal without video
+        modal.style.display = 'block';
+        modalTitle.textContent = title;
+        modalDescription.textContent = description;
+        modalCategory.textContent = category;
+        
+        // Add class to show the modal with transition
+        setTimeout(() => {
+            modal.classList.add('show');
+            
+            // Only after the modal is visible, add the iframe to prevent it from appearing elsewhere
+            setTimeout(() => {
+                modalVideoContainer.innerHTML = `<iframe src="https://player.vimeo.com/video/${vimeoId}?autoplay=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+            }, 200);
+        }, 10);
+        
+        // Prevent scrolling on the body
+        document.body.style.overflow = 'hidden';
+        
+        // Show modal
+        modal.style.display = 'block';
+        setTimeout(() => {
+            modal.classList.add('show');
+        }, 10);
+        
+        // Prevent scrolling on the body
+        document.body.style.overflow = 'hidden';
+    }
+    
+    // Close modal when clicking on X
+    modalClose.addEventListener('click', closeModal);
+    
+    // Close modal when clicking outside of modal content
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+    
+    // Close modal when pressing ESC key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('show')) {
+            closeModal();
+        }
+    });
+      function closeModal() {
+        modal.classList.remove('show');
+        
+        // Immediately clear video iframe to stop playback
+        modalVideoContainer.innerHTML = '';
+        
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+        
+        // Re-enable scrolling
+        document.body.style.overflow = 'auto';
+    }
+    
     // Smooth Scrolling for Navigation Links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -104,7 +251,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentTestimonial = 0;
     const testimonials = document.querySelectorAll('.testimonial-slide');
     
-    if (testimonials.length > 1) {
+    // Only run testimonial slider if testimonials exist
+    if (testimonials && testimonials.length > 1) {
         // Hide all but the first testimonial
         testimonials.forEach((testimonial, index) => {
             if (index !== 0) {
@@ -118,7 +266,9 @@ document.addEventListener('DOMContentLoaded', function() {
             currentTestimonial = (currentTestimonial + 1) % testimonials.length;
             testimonials[currentTestimonial].style.display = 'block';
         }, 6000);
-    }    // Form Submission
+    }
+    
+    // Form Submission
     const contactForm = document.getElementById('project-inquiry');
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
@@ -153,25 +303,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Show success message
                 alert('Thanks for your message! I\'ll get back to you soon.');
             }
-            // If using FormSubmit, let the form submit normally
         });
     }
     
     // Unmute Vimeo hero reel
-    var unmuteBtn = document.getElementById('unmute-hero-reel');
-    var unmuteIcon = document.getElementById('unmute-hero-reel-icon');
-    var heroReel = document.getElementById('hero-reel');
-    var vimeoPlayer;
+    const unmuteBtn = document.getElementById('unmute-hero-reel');
+    const unmuteIcon = document.getElementById('unmute-hero-reel-icon');
+    const heroReel = document.getElementById('hero-reel');
+    let vimeoPlayer;
+    
     function ensureVimeoPlayerLoaded(callback) {
         if (window.Vimeo && window.Vimeo.Player) {
             callback();
         } else {
-            var script = document.createElement('script');
+            const script = document.createElement('script');
             script.src = 'https://player.vimeo.com/api/player.js';
             script.onload = callback;
             document.head.appendChild(script);
         }
     }
+    
     if (unmuteBtn && heroReel) {
         ensureVimeoPlayerLoaded(function() {
             vimeoPlayer = new window.Vimeo.Player(heroReel);

@@ -339,20 +339,61 @@ nav ul li a.active:after {
     overflow: hidden;
 }
 
-.embed-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+/* Hide all iframes in portfolio items - they should only appear in the modal */
+.portfolio-item iframe {
+    display: none;
 }
 
-.embed-container iframe {
+/* Removed embed-container classes as we're using thumbnails now */
+
+.thumbnail-container {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    background-color: #000;
+    overflow: hidden;
+    z-index: 3; /* Ensure it's above any potential iframes */
+    pointer-events: auto; /* Ensure clicks are captured */
+}
+
+.portfolio-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.play-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: rgba(52, 152, 219, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+}
+
+.play-indicator i {
+    color: white;
+    font-size: 24px;
+    margin-left: 4px; /* Slight offset to center the play icon */
+}
+
+.portfolio-item:hover .portfolio-thumbnail {
+    transform: scale(1.05);
+}
+
+.portfolio-item:hover .play-indicator {
+    background-color: rgba(52, 152, 219, 1);
+    transform: translate(-50%, -50%) scale(1.1);
 }
 
 .portfolio-info {

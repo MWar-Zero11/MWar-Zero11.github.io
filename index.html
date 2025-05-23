@@ -5,6 +5,7 @@
     <title>DynamicVibe Productions | Professional Video Editing Services</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/intro-section.css">
+    <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>    <header>
@@ -63,28 +64,31 @@
                 <button class="filter-btn" data-filter="documentary">Documentary</button>
                 <button class="filter-btn" data-filter="narrative">Narrative</button>
                 <button class="filter-btn" data-filter="music">Music Video</button>
-            </div>
-
-            <div class="portfolio-grid">
-                <!-- Project 1 -->
-                <div class="portfolio-item commercial">
+            </div>            <div class="portfolio-grid">                <!-- Project 1 -->
+                <div class="portfolio-item commercial" data-vimeo-id="1071723790" data-title="DynamicVibe Productions Full Edit Real" data-description="Assorted clips from recent video edits compiled 2025." data-category="Commercial">
                     <div class="portfolio-video">
-                        <div class="embed-container">
-                            <iframe src="https://player.vimeo.com/video/123456789" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                        <div class="thumbnail-container">
+                            <img src="https://i.vimeocdn.com/video/default-thumbnail.jpg" alt="DynamicVibe Productions Full Edit Real" class="portfolio-thumbnail">
+                            <div class="play-indicator">
+                                <i class="fas fa-play"></i>
+                            </div>
                         </div>
                     </div>
                     <div class="portfolio-info">
-                        <h3>Brand Campaign</h3>
-                        <p>Commercial for major clothing brand focusing on summer collection</p>
+                        <h3>DynamicVibe Productions Full Edit Real</h3>
+                        <p>Assorted clips from recent video edits compiled 2025.</p>
                         <span class="tag">Commercial</span>
                     </div>
-                </div>
-
-                <!-- Project 2 -->
-                <div class="portfolio-item documentary">
+                    <div class="view-project-overlay">
+                        <span>View Project</span>
+                    </div>
+                </div><!-- Project 2 -->                <div class="portfolio-item documentary" data-vimeo-id="123456790" data-title="Ocean Explorers" data-description="Documentary short about marine conservation efforts" data-category="Documentary">
                     <div class="portfolio-video">
-                        <div class="embed-container">
-                            <iframe src="https://player.vimeo.com/video/123456790" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                        <div class="thumbnail-container">
+                            <img src="https://i.vimeocdn.com/video/default-thumbnail.jpg" alt="Ocean Explorers" class="portfolio-thumbnail">
+                            <div class="play-indicator">
+                                <i class="fas fa-play"></i>
+                            </div>
                         </div>
                     </div>
                     <div class="portfolio-info">
@@ -92,13 +96,16 @@
                         <p>Documentary short about marine conservation efforts</p>
                         <span class="tag">Documentary</span>
                     </div>
-                </div>
-
-                <!-- Project 3 -->
-                <div class="portfolio-item narrative">
+                    <div class="view-project-overlay">
+                        <span>View Project</span>
+                    </div>
+                </div><!-- Project 3 -->                <div class="portfolio-item narrative" data-vimeo-id="123456791" data-title="The Last Letter" data-description="Short film about reconnecting with the past" data-category="Narrative">
                     <div class="portfolio-video">
-                        <div class="embed-container">
-                            <iframe src="https://player.vimeo.com/video/123456791" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                        <div class="thumbnail-container">
+                            <img src="https://i.vimeocdn.com/video/default-thumbnail.jpg" alt="The Last Letter" class="portfolio-thumbnail">
+                            <div class="play-indicator">
+                                <i class="fas fa-play"></i>
+                            </div>
                         </div>
                     </div>
                     <div class="portfolio-info">
@@ -106,19 +113,25 @@
                         <p>Short film about reconnecting with the past</p>
                         <span class="tag">Narrative</span>
                     </div>
-                </div>
-
-                <!-- Project 4 -->
-                <div class="portfolio-item music">
+                    <div class="view-project-overlay">
+                        <span>View Project</span>
+                    </div>
+                </div>                <!-- Project 4 -->                <div class="portfolio-item music" data-vimeo-id="123456792" data-title="Rhythms of Life" data-description="Music video for indie band's debut single" data-category="Music Video">
                     <div class="portfolio-video">
-                        <div class="embed-container">
-                            <iframe src="https://player.vimeo.com/video/123456792" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                        <div class="thumbnail-container">
+                            <img src="https://i.vimeocdn.com/video/default-thumbnail.jpg" alt="Rhythms of Life" class="portfolio-thumbnail">
+                            <div class="play-indicator">
+                                <i class="fas fa-play"></i>
+                            </div>
                         </div>
                     </div>
                     <div class="portfolio-info">
                         <h3>Rhythms of Life</h3>
                         <p>Music video for indie band's debut single</p>
                         <span class="tag">Music Video</span>
+                    </div>
+                    <div class="view-project-overlay">
+                        <span>View Project</span>
                     </div>
                 </div>
 
@@ -329,10 +342,26 @@
                     <a href="#contact">Contact</a>
                 </div>
             </div>            <div class="footer-bottom">
-                <p>&copy; 2025 DynamicVibe Productions. All rights reserved.</p>
-            </div>
+                <p>&copy; 2025 DynamicVibe Productions. All rights reserved.</p>            </div>
         </div>
     </footer>
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div class="modal-body">
+                <div class="modal-video-container">
+                    <!-- Video iframe will be inserted here dynamically -->
+                </div>
+                <div class="modal-info">
+                    <h2 id="modal-title"></h2>
+                    <p id="modal-description"></p>
+                    <span id="modal-category" class="tag"></span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="js/main.js"></script>
 </body>
