@@ -200,12 +200,9 @@ nav ul li a.active:after {
     height: 100vh;
     min-height: 600px;
     display: flex;
-    align-items: center;
-    justify-content: center;
     color: white;
-    text-align: center;
     overflow: hidden;
-    margin-top: 0;
+    margin: 0;
     padding: 0;
 }
 

@@ -118,30 +118,42 @@ document.addEventListener('DOMContentLoaded', function() {
             currentTestimonial = (currentTestimonial + 1) % testimonials.length;
             testimonials[currentTestimonial].style.display = 'block';
         }, 6000);
-    }
-    
-    // Form Submission
+    }    // Form Submission
     const contactForm = document.getElementById('project-inquiry');
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+            // Check if we need to use our fallback handler
+            const isFormSubmit = this.getAttribute('action').indexOf('formsubmit.co') !== -1;
             
-            // Collect form data
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                projectType: document.getElementById('project-type').value,
-                message: document.getElementById('message').value
-            };
-            
-            // Here you would normally send the data to your server
-            // For now, we'll just simulate a successful submission
-            
-            // Clear form
-            this.reset();
-            
-            // Show success message (you would implement this based on your design)
-            alert('Thanks for your message! I\'ll get back to you soon.');
+            // If using GitHub Pages and FormSubmit
+            if (isFormSubmit) {
+                // Let FormSubmit handle it (default behavior)
+                console.log('Using FormSubmit for form handling');
+                
+                // Add tracking for successful submission (optional)
+                localStorage.setItem('form_submitted', 'true');
+                localStorage.setItem('form_submitted_time', new Date().toISOString());
+            } else {
+                // Fallback for when FormSubmit is not being used
+                e.preventDefault();
+                
+                // Collect form data
+                const formData = {
+                    name: document.getElementById('name').value || '',
+                    email: document.getElementById('email').value || '',
+                    message: document.getElementById('message').value || ''
+                };
+                
+                // Log the form data (for debugging purposes)
+                console.log('Form data:', formData);
+                
+                // Clear form
+                this.reset();
+                
+                // Show success message
+                alert('Thanks for your message! I\'ll get back to you soon.');
+            }
+            // If using FormSubmit, let the form submit normally
         });
     }
     
