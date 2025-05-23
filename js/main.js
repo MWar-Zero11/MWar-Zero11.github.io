@@ -144,6 +144,40 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Thanks for your message! I\'ll get back to you soon.');
         });
     }
+    
+    // Unmute Vimeo hero reel
+    var unmuteBtn = document.getElementById('unmute-hero-reel');
+    var unmuteIcon = document.getElementById('unmute-hero-reel-icon');
+    var heroReel = document.getElementById('hero-reel');
+    var vimeoPlayer;
+    function ensureVimeoPlayerLoaded(callback) {
+        if (window.Vimeo && window.Vimeo.Player) {
+            callback();
+        } else {
+            var script = document.createElement('script');
+            script.src = 'https://player.vimeo.com/api/player.js';
+            script.onload = callback;
+            document.head.appendChild(script);
+        }
+    }
+    if (unmuteBtn && heroReel) {
+        ensureVimeoPlayerLoaded(function() {
+            vimeoPlayer = new window.Vimeo.Player(heroReel);
+            unmuteBtn.addEventListener('click', function() {
+                vimeoPlayer.getVolume().then(function(volume) {
+                    if (volume === 0) {
+                        vimeoPlayer.setVolume(1);
+                        unmuteIcon.classList.remove('fa-volume-mute');
+                        unmuteIcon.classList.add('fa-volume-up');
+                    } else {
+                        vimeoPlayer.setVolume(0);
+                        unmuteIcon.classList.remove('fa-volume-up');
+                        unmuteIcon.classList.add('fa-volume-mute');
+                    }
+                });
+            });
+        });
+    }
 });
 
 // Add a loading animation for videos
