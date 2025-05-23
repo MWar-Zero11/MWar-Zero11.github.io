@@ -236,18 +236,22 @@ nav ul li a.active:after {
     padding: 20px;
     position: relative;
     z-index: 2;
+    text-align: center;
+    margin: 0 auto;
 }
 
 .hero-content h1 {
     font-size: 3.5rem;
     margin-bottom: 20px;
     letter-spacing: 1px;
+    text-align: center;
 }
 
 .hero-content p {
     font-size: 1.2rem;
     margin-bottom: 30px;
     opacity: 0.9;
+    text-align: center;
 }
 
 .cta-buttons {
